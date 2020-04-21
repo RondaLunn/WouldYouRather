@@ -1,19 +1,26 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Link, withRouter } from 'react-router-dom'
+import { handleAnswerQuestion } from '../actions/questions'
 
 class Question extends Component {
 
 
     handleAnswer = (e) => {
         e.preventDefault()
-        // Handle like tweet
+        const answer = e.target.name
+        const { dispatch } = this.props
+
+        dispatch(handleAnswerQuestion(this.props.id, answer))
+
+        this.props.history.push(`/questions/${this.props.id}`)
     }
 
     render() {
-        const { question, author } = this.props
+        const { question, author, id } = this.props
 
-        if(question === null) {
-            return <p>This question does not exist</p>
+        if (question === null) {
+            return <p className='center'>Error 404: This question does not exist</p>
         }
 
         const {
@@ -21,7 +28,7 @@ class Question extends Component {
         } = question
 
         return (
-            <div className="question">
+            <Link className="question" to={`/questions/${id}`}>
                 <h3 className='center'>Would You Rather...</h3>
                 <div className='question-info'>
                     <div className='author-info'>
@@ -32,21 +39,21 @@ class Question extends Component {
                         <p>Asked by {author.name}</p>
                     </div>
                     <div className='question-options'>
-                        <button className='btn'>{optionOne.text}?</button>
+                        <button className='btn' name='optionOne' onClick={this.handleAnswer}>{optionOne.text}?</button>
                         <p>OR</p>
-                        <button className='btn'>{optionTwo.text}?</button>
+                        <button className='btn' name='optionTwo' onClick={this.handleAnswer}>{optionTwo.text}?</button>
                     </div>
                 </div>
-            </div>
+            </Link>
         )
     }
 }
 
 function mapStateToProps ({authedUser, questions, users}, {id}) {
-    const question = questions[id]
-    const author = users[question.author]
+    const question = questions[id] ? questions[id] : null
+    const author = question ? users[question.author] : null
 
-    return{
+    return {
         authedUser,
         question: question,
         author: author
@@ -54,4 +61,4 @@ function mapStateToProps ({authedUser, questions, users}, {id}) {
 
 }
 
-export default connect(mapStateToProps)(Question)
+export default withRouter(connect(mapStateToProps)(Question))

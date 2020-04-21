@@ -6,6 +6,7 @@ import LoadingBar from 'react-redux-loading'
 import Home from './Home'
 import LeaderBoard from './LeaderBoard'
 import NewQuestion from './NewQuestion'
+import QuestionPage from './QuestionPage'
 import Navigation from './Navigation'
 import Login from './Login'
 
@@ -24,10 +25,10 @@ class App extends Component {
       <div className="container">
         <Navigation />
         
-        {this.props.loading && <Login />}
-        
-        
-        <Route exact path='/' render ={() => (
+        {this.props.loading 
+        ? <Login />
+        : <Fragment>
+          <Route exact path='/' render ={() => (
             <div>{this.props.loading === true 
               ? null
               : <Home />}
@@ -48,6 +49,9 @@ class App extends Component {
               </div>
           )} /> 
 
+        <Route path='/questions/:question_id' component={QuestionPage}/>
+        </Fragment>
+            }
       </div>
       </Fragment>
     </BrowserRouter>
