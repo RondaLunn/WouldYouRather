@@ -35,14 +35,14 @@ class App extends Component {
               </div>
           )} />
 
-        <Route path='/leader' render ={() => (
+        <Route path='/leaderboard' render ={() => (
             <div>{this.props.loading === true 
               ? null
               : <LeaderBoard />}
               </div>
           )} /> 
 
-        <Route path='/new' render ={() => (
+        <Route path='/add' render ={() => (
             <div>{this.props.loading === true 
               ? null
               : <NewQuestion />}
